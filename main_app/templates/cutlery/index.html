@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block title %}
+All blades 
+{% endblock %}
+
+{% block content %}
+
+<h1>Cutlery List</h1>
+
+{% for blade in blades %}
+    <div class="card">
+        <div class="card-content">
+            <span class="card-title">{{ blade.maker }}</span>
+            <p>Style: {{ blade.style }}</p>
+            <p>Use: {{ blade.use }}</p>
+            <p>Type of Steel: {{ blade.steel }}</p>
+            <p>Price: {{ blade.price }}</p>
+            {% if blade.price < 300 %}
+                <p>This is a great deal! {{ blade.price }}</p>
+            {% else %}
+                <p>I may need to save up for this one! {{ blade.price }}</p>
+            {% endif %}
+        </div>
+    </div>
+{% endfor %}
+
+{% endblock %}
