@@ -1,16 +1,43 @@
 from django.db import models
 
-# Create your models here.
-class Cutlery:
-    def __init__(self, maker, style, use, steel, price):
-        self.maker = maker
-        self.style = style
-        self.use = use 
-        self.steel = steel
-        self.price = price
 
-blades = [
-    Cutlery('Shun', 'Meat-Cleaver', 'Meat/Bone', 'AUS 8 Stainless Steel', 159.95),
-    Cutlery('Asai Enji', 'Fruit/Utility', 'Fruit/Vegetables', 'damascus san mai VG-10 core', 196.00),
-    Cutlery('Yoshikazu Ikeda', 'Sushi', 'Sashimi', 'mizu-honyaki shirogami 3 carbon steel', 3500.00)
-]
+SHARP = (
+    ('H', 'Hone'),
+    ('S', 'Sharpen'),
+    ('G', 'Grind')
+)
+
+# Create your models here.
+
+class Prep(models.Model):
+    product = models.CharField(max_length=100)
+    specs = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.product
+
+
+class Cutlery(models.Model):
+    maker = models.CharField(max_length=100)
+    style = models.CharField(max_length=100)
+    use = models.CharField(max_length=100) 
+    steel = models.CharField(max_length=100)
+    price = models.IntegerField()
+    prep = models.ManyToManyField(Prep)
+
+    def __str__(self):
+        return self.maker
+
+class Sharpen(models.Model):
+    date = models.DateField('sharpen date')
+    sharp = models.CharField(
+        max_length=1,
+        choices=SHARP,
+        default=SHARP[0][0]
+    )
+    cutlery = models.ForeignKey(Cutlery, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f'{self.get_sharp_display()} on {self.date}'
+
+

@@ -6,23 +6,25 @@ All blades
 
 {% block content %}
 
-<h1>Cutlery List</h1>
+    <h1>Cutlery List</h1>
 
-{% for blade in blades %}
-    <div class="card">
-        <div class="card-content">
-            <span class="card-title">{{ blade.maker }}</span>
-            <p>Style: {{ blade.style }}</p>
-            <p>Use: {{ blade.use }}</p>
-            <p>Type of Steel: {{ blade.steel }}</p>
-            <p>Price: {{ blade.price }}</p>
-            {% if blade.price < 300 %}
-                <p>This is a great deal! {{ blade.price }}</p>
-            {% else %}
-                <p>I may need to save up for this one! {{ blade.price }}</p>
-            {% endif %}
+    {% for cutlery in cutlery %}
+    <a href="{% url 'detail' cutlery.id %}">
+        <div class="card">
+            <div class="card-content">
+                <span class="card-title">{{ cutlery.maker }}</span>
+                <p>Style: {{ cutlery.style }}</p>
+                <p>Use: {{ cutlery.use }}</p>
+                <p>Type of Steel: {{ cutlery.steel }}</p>
+                <p>Price: ${{ cutlery.price }}</p>
+                {% if cutlery.price < 300 %}
+                    <p>This is a great deal! ${{ cutlery.price }}</p>
+                {% else %}
+                    <p>I may need to save up for this one! ${{ cutlery.price }}</p>
+                {% endif %}
+            </div>
         </div>
-    </div>
+    </a>
 {% endfor %}
 
 {% endblock %}

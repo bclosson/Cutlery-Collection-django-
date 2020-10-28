@@ -1,0 +1,103 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h1>Cutlery Details</h1>
+
+<div class="row">
+  <div class="col s6">
+    <div class="card">
+      <div class="card-content">
+        <span class="card-title">{{ cutlery.maker }}</span>
+        <p>Type: {{ cutlery.type }}</p>
+        <p>Use: {{ cutlery.use }}</p>
+        {% if cutlery.price < 300 %}
+            <p>This is a great deal! {{ cutlery.price }}</p>
+        {% else %}
+            <p>I may need to save up for this one! {{ cutlery.price }}</p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+  <div class="col s6">
+    <form action="{% url 'add_sharpen' cutlery.id %}" method="post">
+    {% csrf_token %}
+    {{ sharpen_form.as_p }}
+    <input type="submit" class="btn" value="Add Sharpen">
+  </form>
+    <table class="striped">
+      <thead>
+        <tr><th>Date</th><th>Sharpen</th></tr>
+      </thead>
+      <tbody>
+        {% for sharpen in cutlery.sharpen_set.all %}
+          <tr>
+            <td>{{sharpen.date}}</td>
+            <td>{{sharpen.get_sharp_display}}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+<!-- This is all new markup to be added  just above the <script tag -->
+<hr>
+<div class="row">
+  <div class="col s6">
+    <h3>{{ cutlery.maker }}'s Prep Projects</h3>
+    {% if cutlery.prep.count %}
+      {% for prep in cutlery.prep.all %}
+      <div class="card">
+        <div class="card-content">
+          <span class="card-title">
+            {{ prep.product }}
+          </span>
+        </div>
+          <div class="card-action">
+            <form action="{% url 'remove_prep' cutlery.id prep.id %}" method="delete">
+              {% csrf_token %}
+              <button type="submit" class="btn">Delete</button>
+            </form>
+          </div>
+      </div>
+    {% endfor %}
+  {% else %}
+    <h5>No Prep Projects Assigned :(</h5>
+    {% endif %}
+  </div>
+  <!--  Available Prep Projects will come after this line  -->
+  <div class="col s6">
+    <h3>Available Prep Projects</h3>
+    {% if prep.count %}
+      {% for prep in prep.all %}
+        <div class="card">
+          <div class="card-content">
+            <span class="card-title">
+              {{ prep.product }}
+            </span>
+          </div>
+          <div class="card-action">
+            <form action="{% url 'assoc_prep' cutlery.id prep.id %}" method="post">
+              {% csrf_token %}
+              <button type="submit" class="btn">Add</button>
+            </form>
+          </div>
+        </div>
+      {% endfor %}
+    {% else %}
+      <h5>{{ prep.product }} Already Has All Prep Projects Available</h5>
+    {% endif %}  
+  </div>
+</div>
+<script>
+    const dateEl = document.getElementById('id_date');
+    M.Datepicker.init(dateEl, {
+        format: 'yyyy-mm-dd',
+        defaultDate: new Date(),
+        setDefaultDate: true,
+        autoClose: true
+    });
+
+    const selectEl = document.getElementById('id_sharpen');
+    M.FormSelect.init(id_sharpen)
+  </script>
+{% endblock %}
