@@ -16,6 +16,11 @@
             <p>I may need to save up for this one! {{ cutlery.price }}</p>
         {% endif %}
       </div>
+      <!--   EDIT AND DELETE ACTIONS  -->
+          <div class="card_action">
+            <a href="{% url 'delete_cutlery' cutlery.id %}" class="btn-small red">Delete</a>
+            <a href="{% url 'edit_cutlery' cutlery.id %}" class="btn-small">Edit</a>
+          </div>
     </div>
   </div>
   <div class="col s6">

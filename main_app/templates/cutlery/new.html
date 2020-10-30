@@ -1,0 +1,16 @@
+ {% extends 'base.html' %}
+ {% block content %}
+
+ <h1>Add New Cutlery</h1>
+
+ <form action="{% url 'add_cutlery'%}" method="POST">
+    <!-- CSRF TOKEN - Cross Site Request Forgery -->
+    {% csrf_token %}
+
+    {{ form.as_p }}
+
+ <button class="btn" type="submit">Add Cutlery</button>
+
+ </form>
+
+ {% endblock %}
